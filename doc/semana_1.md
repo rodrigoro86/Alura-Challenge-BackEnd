@@ -3,6 +3,8 @@
 
 ### Índice 
 * [História](#história)
+* [Iniciando o projeto](#iniciando_o_projeto)
+* [Tests](#tests)
 
 
 ### História
@@ -24,8 +26,6 @@ Temos um período de tempo de 4 semanas para desenvolver o projeto. Nas 3 primei
 4. Por fim, a coluna **Concluído** terá os elementos já concluídos.
 
 O Trello é uma ferramenta de uso individual para você controlar o andamento das suas atividades, mas ela não será avaliada.
-
-Bom projeto!
 
 ### Iniciando o projeto
 
@@ -160,7 +160,7 @@ urlpatterns = [
 ```
 Na página index desse projeto terá aurl dos vídeos 
 
-## Tests 
+### Tests 
 Testes são muito importantes, eu não entendi o porque de criar um teste visto que eu já sei como vou chamar a função e oque vai retornar masssss entendi que hoje eu crio um teste e no futuro o código pode mudar e a alteração de uma função pode quebrar outra os testes são necessários para validar isso e manter a extrutura do código. 
 Outra coisa é que dá para entender um pouco do funcionamento do código. 
 
@@ -228,4 +228,29 @@ class VideoSerializerTestCase(TestCase):
         self.assertEqual(data['url'], self.video.url)
 ```
 
-#### Teste URL
+#### Teste URL 
+
+```
+class URL_API_TestCase(APITestCase):
+    def __init__(self, basename:str):
+        self.user = User.objects.create_user(username='teste', password='teste')
+        self.list_url = reverse(basename)
+        
+    def get_URL(self, client):
+        resposta_api = client.get(self.list_url)
+        data_videos = json.dumps(resposta_api.data, indent=4)
+        data_videos = json.loads(data_videos)
+        return resposta_api, data_videos
+
+    def post_URL(self, client, comando):
+        resposta_api = client.post(self.list_url, data=comando)
+        return resposta_api
+    
+    def delete_URL(self, client, id):
+        resposta_api = client.delete(self.list_url+f'{id}/')
+        return resposta_api
+
+    def put_URL(self, client, id, comando):
+        resposta_api = client.put(self.list_url+f'{id}/', data=comando)
+        return resposta_api
+```
