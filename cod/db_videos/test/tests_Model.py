@@ -6,6 +6,11 @@ from db_videos.models import Video, Categoria
 
 class VideoTestCase(TestCase):
     def setUp(self):
+        Categoria.objects.create(
+                titulo = 'LIVRE',
+                cor = '#FFF',
+            )
+
         Video.objects.create(
                 titulo = 'Alura Video 1',
                 descricao = 'Video Teste',
@@ -15,9 +20,10 @@ class VideoTestCase(TestCase):
     def test_validacao_parametros_model_video(self):
         """Verifica o nome dos atributos do modelo Video"""
         video = Video.objects.get(id=1)
-        self.assertEquals(video._meta.get_field('titulo').verbose_name, 'titulo')
-        self.assertEquals(video._meta.get_field('descricao').verbose_name, 'descricao')
-        self.assertEquals(video._meta.get_field('url').verbose_name, 'url')    
+        self.assertEquals(video._meta.get_field('titulo').verbose_name, 'titulo', msg='Atributo titulo não encontrado')
+        self.assertEquals(video._meta.get_field('descricao').verbose_name, 'descricao', msg='Atributo descricao não encontrado')
+        self.assertEquals(video._meta.get_field('url').verbose_name, 'url', msg='Atributo url não encontrado')
+        self.assertEquals(video._meta.get_field('categoriaId').verbose_name, 'categoriaId', msg='Atributo categoriaId não encontrado')        
 
     def test_max_length_parametros_model_video(self):
         """Verifica a quantidade de caracterer dos atributos tituto e url"""

@@ -1,7 +1,7 @@
 from dataclasses import field
 from rest_framework.test import APITestCase
 from rest_framework import status
-from db_videos.models import Video
+from db_videos.models import Video, Categoria
 from django.urls import reverse
 import json, requests
 from django.contrib.auth.models import User
@@ -33,6 +33,10 @@ class URL_API_TestCase(APITestCase):
 
 class URL_Videos_TestCase(APITestCase):
     def setUp(self):
+        Categoria.objects.create(
+                titulo = 'Alura Video 1',
+                cor = '#FFF',
+            )
         self.video_teste_1 = Video.objects.create(
             titulo = 'Alura Video 1',
             descricao = 'Video Teste',
@@ -99,3 +103,62 @@ class URL_Videos_TestCase(APITestCase):
         self.assertEqual(resp.data['titulo'], data_video_teste['titulo'])
         self.assertEqual(resp.data['descricao'], data_video_teste['descricao'])
         self.assertEqual(resp.data['url'], data_video_teste['url'])
+
+class URL_Categoria_TestCase(APITestCase):
+    def setUp(self):
+        
+        self.categoria_test = Categoria.objects.create(
+                titulo = 'Alura Video 1',
+                cor = '#FFF',
+        )
+        
+        self.obj_test = URL_API_TestCase('Categorias-list')
+        self.client.force_authenticate(self.obj_test.user)
+
+    def test_get_para_listar_todos_as_categorias(self):
+        """Teste da requisição GET para listar todos os videos"""
+        resposta_api, data_videos =  self.obj_test.get_URL(self.client)
+        self.assertEqual(resposta_api.status_code, status.HTTP_200_OK)
+    
+    def test_get_verifica_se_retorna_uma_lista(self):
+        """Teste da requisição GET verificar se retorna uma lista com os dados dos videos"""
+        resposta_api, data_videos =  self.obj_test.get_URL(self.client)
+        self.assertEqual(type(data_videos), list)
+
+    def test_get_verifica_se_retorna_dados_da_primeira_categoria(self):
+        """Teste da requisição GET verificar se retorna os dados do primeiro vídeo"""
+        response = self.client.get(self.obj_test.list_url+'1/')
+        self.assertEqual(response.data['titulo'], self.categoria_test.titulo)
+        self.assertEqual(response.data['cor'], self.categoria_test.cor)
+
+    def test_post_cria_categoria_e_valida_video_criado(self):
+        """Esse teste além de criar um video pelo post ele valida se o video foi criado corretamente"""
+        categoria_test_2 = {
+            'titulo' : 'Alura Video 2',
+            'cor' : '#FFF',
+        }
+        response = self.obj_test.post_URL(self.client, categoria_test_2)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        resp = self.client.get(self.obj_test.list_url+'2/')
+        self.assertEqual(resp.data['titulo'], categoria_test_2['titulo'])
+        self.assertEqual(resp.data['cor'], categoria_test_2['cor'])
+    
+    def test_delete_categoria_e_verifica_se_nao_e_encontrado(self):
+        """Remove um video e verifica se não é encontrado"""
+        response = self.obj_test.delete_URL(self.client, 1)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        resp = self.client.get(self.obj_test.list_url+'1/')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_put_edita_dados_video(self):
+        """Edita o titulo do video ID 1 e valida os dados com o modelo"""
+        categoria_test_2 = {
+            'titulo' : 'Alura Video 2',
+            'cor' : '#FFF',
+        }
+        response = self.obj_test.put_URL(self.client, 1, categoria_test_2)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        resp = self.client.get(self.obj_test.list_url+'1/')
+        self.assertEqual(resp.data['titulo'], categoria_test_2['titulo'])
+        self.assertEqual(resp.data['cor'], categoria_test_2['cor'])

@@ -16,3 +16,5 @@ Dividimos a implementação dessa feat da seguinte forma:
 2. Rotas CRUD para /categorias;
 3. Incluir campo categoriaId no modelo video;
 4. Escrever os testes necessários.
+
+# 

@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "db_videos",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [

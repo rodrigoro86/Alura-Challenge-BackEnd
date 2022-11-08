@@ -5,6 +5,10 @@ from db_videos.serializer import VideoSerializer, CategoriaSerializer
 
 class VideoSerializerTestCase(TestCase):
     def setUp(self):
+        Categoria.objects.create(
+                titulo = 'LIVRE',
+                cor = '#FFF',
+            )
         self.video = Video.objects.create(
                 titulo = 'Alura Video 1',
                 descricao = 'Video Teste',
@@ -16,7 +20,7 @@ class VideoSerializerTestCase(TestCase):
     def test_verifica_campos_serializados_VideoSerializer(self):
         """Valida os campos serializados no VideoSerializer"""
         data = self.serializer_test.data
-        self.assertEqual(set(data.keys()), set(['id', 'titulo', 'descricao', 'url']))
+        self.assertEqual(set(data.keys()), set(['id', 'titulo', 'categoriaId', 'descricao', 'url']))
     
     def test_verica_conteudo_campos_serializados_VideoSerializer(self):
         """Verifica o conteúdo dos campos serializados se estão iguais ao do teste"""
@@ -24,6 +28,7 @@ class VideoSerializerTestCase(TestCase):
         self.assertEqual(data['titulo'], self.video.titulo)
         self.assertEqual(data['descricao'], self.video.descricao)
         self.assertEqual(data['url'], self.video.url)
+
 
 class CategoriaSerializerTestCase(TestCase):
     def setUp(self):

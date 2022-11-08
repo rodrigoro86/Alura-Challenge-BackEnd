@@ -3,8 +3,8 @@ from db_videos.models import Video, Categoria
 
 # @Dm14 
 class Videos(admin.ModelAdmin):
-    list_display = ('id', 'titulo', 'descricao', 'url')
-    list_display_links = ('id', 'titulo', 'url')
+    list_display = ('id', 'titulo', 'descricao', 'url', 'categoriaId')
+    list_display_links = ('id', 'titulo', 'url', 'categoriaId')
     search_fields = ('titulo',)
     list_per_page = 50
 

@@ -1,0 +1,10 @@
+[
+    {
+      "model": "db_videos.categoria",     
+      "pk": 1,
+      "fields": {
+        "titulo": "LIVRE",
+        "cor": "#FFF"
+      }
+    }
+  ]

@@ -8,6 +8,7 @@ from db_videos.models import Video, Categoria
 from db_videos.serializer import (
     VideoSerializer,
     CategoriaSerializer,
+    ListaCategoriaVideosSerializer,
 )
 
 
@@ -28,3 +29,12 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['titulo']
+
+class ListaCategoriaVideosViewSet(generics.ListAPIView):
+    """Lista todos os videos de uma categoria específica"""
+    def get_queryset(self):
+        queryset = Video.objects.filter(categoriaId=self.kwargs['id'])
+        return queryset
+    serializer_class = ListaCategoriaVideosSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]

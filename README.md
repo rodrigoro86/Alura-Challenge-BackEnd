@@ -4,17 +4,27 @@
 
 ### Cadernos
 * [Caderno Semana 1](doc/semana_1.md)
+* [Caderno Semana 2](doc/semana_2.md)
 
 ### Tecologias 
 - Python
 - Google Cloud
 
-### Bibliotecas
-- Django==4.1.2
-- django-filter==22.1
-- djangorestframework==3.14.0
-- Markdown==3.4.1
-- requests==2.28.1
+### Documentação do projeto
+* [Redoc](http://34.138.208.237/redoc/)
+* [Swagger](http://34.138.208.237/swagger/)
+
 
 ### Link da API
 Link da API -> [http://34.138.208.237/](http://34.138.208.237/)
+
+### Instalação
+
+#### Instalação das bibliotecas
+`pip install -r requirements.txt`
+
+#### Rodando o projeto
+`pyton manage.py runserver`
+
+
+
